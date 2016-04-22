@@ -1,4 +1,8 @@
 defmodule WeatherReport.Station do
+  @moduledoc """
+  NOAA observation station.
+  """
+  
   import SweetXml
   @xmap [
     station_id: ~x"//station/station_id/text()"s,

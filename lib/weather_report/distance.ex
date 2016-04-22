@@ -1,4 +1,8 @@
 defmodule WeatherReport.Distance do
+  @moduledoc """
+  Distance related functions.
+  """
+  
   @r 6371000 # earth's radius
   
   @type coordinate :: {float, float}

@@ -1,4 +1,7 @@
 defmodule WeatherReport.Forecast.RSS do
+  @moduledoc """
+  Forecast parsed from a NOAA station RSS feed.
+  """
   alias WeatherReport.RSSParser
   
   defstruct [

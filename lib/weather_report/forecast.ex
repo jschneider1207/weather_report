@@ -1,4 +1,8 @@
-defmodule WeatherReport.Forecast do 
+defmodule WeatherReport.Forecast do
+  @moduledoc """
+  Parse a document into a forecast.
+  """
+  
   alias WeatherReport.Forecast.{RSS, XML}
   @rss_identifier ~s(<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\r\n\r\n<rss version='2.0' xmlns:dc='http://purl.org/dc/elements/1.1/'>)
   @xml_identifier ~s(<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?> \r\n<?xml-stylesheet href=\"latest_ob.xsl\" type=\"text/xsl\"?>)

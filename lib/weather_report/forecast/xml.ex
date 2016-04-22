@@ -1,4 +1,9 @@
-defmodule WeatherReport.Forecast.XML do  
+defmodule WeatherReport.Forecast.XML do
+  @moduledoc """
+  Forecast parsed from a NOAA station XML feed.  
+  Contains more detailed information than a forecast from a station RSS feed.
+  """
+  
   import SweetXml    
   @xmapper [
     suggested_pickup: ~x"//current_observation/suggested_pickup/text()"s,

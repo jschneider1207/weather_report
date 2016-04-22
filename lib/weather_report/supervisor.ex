@@ -1,4 +1,5 @@
 defmodule WeatherReport.Supervisor do
+  @moduledoc false
   use Supervisor
   
   @doc """

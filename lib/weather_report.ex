@@ -10,8 +10,7 @@ defmodule WeatherReport do
   end
   
   alias WeatherReport.{Station, StationRegistry, Forecast}
-  alias HTTPoison.{AsyncResponse, AsyncStatus, AsyncHeaders, AsyncChunk, AsyncEnd, Response}
-  @station_list "http://w1.weather.gov/xml/current_obs/index.xml"
+  alias HTTPoison.Response
   
   @type forecast_format :: :rss | :xml
   @doc """
@@ -19,24 +18,7 @@ defmodule WeatherReport do
   """
   @spec station_list :: [Station.t]
   def station_list do
-    with {:ok, %AsyncResponse{id: ref}} <- HTTPoison.get(@station_list, %{}, stream_to: self),
-      {:ok, doc} <- receive_async(ref, ""),
-      do: Station.parse(doc)
-  end
-  
-  defp receive_async(ref, doc) do
-    receive do
-      %AsyncStatus{code: code, id: ^ref} when code in 200..399 ->
-        receive_async(ref, doc)
-      %AsyncStatus{code: code, id: ^ref} ->
-        {:error, "Unable to fetch station list, http #{code}"}
-      %AsyncHeaders{id: ^ref} ->
-        receive_async(ref, doc)
-      %AsyncChunk{chunk: chunk, id: ^ref} ->
-        receive_async(ref, doc <> chunk)
-      %AsyncEnd{id: ^ref} ->
-        {:ok, doc}
-    end    
+    GenServer.call(StationRegistry, :all)
   end
   
   @doc """

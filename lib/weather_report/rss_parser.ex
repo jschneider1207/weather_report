@@ -1,7 +1,6 @@
 defmodule WeatherReport.RSSParser do
-  @moduledoc """
-  https://github.com/manukall/feeder_ex/blob/master/lib/feeder_ex/parser.ex
-  """
+  @moduledoc false
+  # https://github.com/manukall/feeder_ex/blob/master/lib/feeder_ex/parser.ex
   
   @doc false
   def event({:feed,
