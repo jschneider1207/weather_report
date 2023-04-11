@@ -2,13 +2,7 @@ defmodule WeatherReport do
   @moduledoc """
   Retrieve weather reports from NOAA!
   """
-  use Application
-  
-  @doc false
-  def start(_, _) do
-    WeatherReport.Supervisor.start_link
-  end
-  
+
   alias WeatherReport.{Station, StationRegistry, Forecast}
   alias HTTPoison.Response
   
