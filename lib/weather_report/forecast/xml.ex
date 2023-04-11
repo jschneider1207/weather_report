@@ -4,7 +4,8 @@ defmodule WeatherReport.Forecast.XML do
   Contains more detailed information than a forecast from a station RSS feed.
   """
   
-  import SweetXml    
+  import SweetXml, only: [sigil_x: 2]
+  
   @xmapper [
     suggested_pickup: ~x"//current_observation/suggested_pickup/text()"s,
     suggested_pickup_period: ~x"//current_observation/suggested_pickup_period/text()"s,
