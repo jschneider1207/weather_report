@@ -63,7 +63,7 @@ defmodule WeatherReport.Station do
 
   def station_list do
     with {:ok, %HTTPoison.AsyncResponse{id: ref}} <-
-           HTTPoison.get(@station_list, %{}, stream_to: self),
+           HTTPoison.get(@station_list, %{}, stream_to: self()),
          {:ok, doc} <- receive_async(ref, ""),
          do: parse_station(doc)
   end

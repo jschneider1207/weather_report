@@ -1,10 +1,4 @@
 defmodule WeatherReport.StationRegistry do
-  def child_spec(args) do
-    %{
-      id: __MODULE__,
-      start: {__MODULE__, :start_link, args}
-    }
-  end
 
   @moduledoc false
   use GenServer
@@ -13,8 +7,8 @@ defmodule WeatherReport.StationRegistry do
   @doc """
   Starts the station registry.
   """
-  def start_link do
-    GenServer.start_link(__MODULE__, [], name: __MODULE__)
+  def start_link(args) do
+    GenServer.start_link(__MODULE__, args, name: __MODULE__)
   end
 
   @doc """
@@ -24,12 +18,20 @@ defmodule WeatherReport.StationRegistry do
   """
   def init([]) do
     tab = :ets.new(:station_registry, [:private])
-    send(self, :get_list)
+    send(self(), :get_list)
     {:ok, tab}
   end
 
   @doc """
   Looks up a station by id in ets
+  {by, what}
+  where by can be:
+  :by_station_id
+  :by_state
+  :nearest
+    Calculates the distance between a point and all of the stations, and returns the nearest one.
+
+  or :all for full list
   """
   def handle_call({:by_station_id, station_id}, _from, tab) do
     case :ets.match(tab, {station_id, :_, :_, :"$1"}) do
@@ -38,9 +40,6 @@ defmodule WeatherReport.StationRegistry do
     end
   end
 
-  @doc """
-  Looks up stations by state in ets
-  """
   def handle_call({:by_state, state}, _from, tab) do
     results =
       :ets.match(tab, {:_, state, :_, :"$1"})
@@ -49,14 +48,11 @@ defmodule WeatherReport.StationRegistry do
     {:reply, results, tab}
   end
 
-  @doc """
-  Calculates the distance between a point and all of the stations, and returns the nearest one.
-  """
   def handle_call({:nearest, coords1}, _from, tab) do
     station_id =
       :ets.match(tab, {:"$1", :_, :"$2", :_})
       |> List.flatten()
-      |> Stream.chunk(2)
+      |> Stream.chunk_every(2)
       |> Stream.map(fn [id, coords2] -> {id, Distance.calc(coords1, coords2)} end)
       |> Enum.sort(fn {_, d1}, {_, d2} -> d1 < d2 end)
       |> hd()
@@ -67,9 +63,6 @@ defmodule WeatherReport.StationRegistry do
     {:reply, station, tab}
   end
 
-  @doc """
-  Gets the full station list.
-  """
   def handle_call(:all, _from, tab) do
     results =
       :ets.match(tab, {:_, :_, :_, :"$1"})
