@@ -40,9 +40,9 @@ defmodule WeatherReport.Mixfile do
   defp package do
     [
       files: ["lib", "mix.exs", "README*", "LICENSE*"],
-      maintainers: ["Sam Schneider"],
+      maintainers: ["Jess Schneider"],
       licenses: ["MIT"],
-      links: %{"GitHub" => "https://github.com/sschneider1207/weather_report"}
+      links: %{"GitHub" => "https://github.com/jschneider1207/weather_report"}
     ]
   end
 end
