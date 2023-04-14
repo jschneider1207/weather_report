@@ -1,4 +1,11 @@
 defmodule WeatherReport.StationRegistry do
+  def child_spec(args) do
+    %{
+      id: __MODULE__,
+      start: {__MODULE__, :start_link, args}
+    }
+  end
+  
   @moduledoc false
   use GenServer
   alias WeatherReport.{Station, Distance}
