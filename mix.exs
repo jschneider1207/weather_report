@@ -2,14 +2,14 @@ defmodule WeatherReport.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :weather_report,
-     version: "0.2.0",
-     elixir: "~> 1.4",
-     description: description(),
-     package: package(),
-     build_embedded: Mix.env == :prod,
-     start_permanent: Mix.env == :prod,
-     deps: deps()]
+    [
+      app: :weather_report,
+      version: "0.3.0",
+      elixir: "~> 1.13",
+      description: description(),
+      package: package(),
+      deps: deps()
+    ]
   end
 
   def application do
@@ -20,11 +20,13 @@ defmodule WeatherReport.Mixfile do
   end
 
   defp deps do
-    [{:feeder, "~> 2.0.0"},
-     {:sweet_xml, "~> 0.6.1"},
-     {:httpoison, "~> 0.8.3"},
-     {:earmark, "~> 0.2.1", only: :dev},
-     {:ex_doc, "~> 0.11.4", only: :dev}]
+    [
+      {:feeder, "~> 2.3"},
+      {:sweet_xml, "~> 0.7"},
+      {:httpoison, "~> 2.1"},
+      {:earmark, "~> 1.4", only: :dev},
+      {:ex_doc, "~> 0.29", only: :dev}
+    ]
   end
 
   defp description do
@@ -40,6 +42,7 @@ defmodule WeatherReport.Mixfile do
       files: ["lib", "mix.exs", "README*", "LICENSE*"],
       maintainers: ["Sam Schneider"],
       licenses: ["MIT"],
-      links: %{"GitHub" => "https://github.com/sschneider1207/weather_report"}]
+      links: %{"GitHub" => "https://github.com/sschneider1207/weather_report"}
+    ]
   end
 end
