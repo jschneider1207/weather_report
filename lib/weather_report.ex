@@ -52,6 +52,7 @@ defmodule WeatherReport do
   end
 
   def get_forecast(station, type) do
+  require Logger
     url =
       case type do
         {:raw, subtype} when subtype in [:rss, :xml] ->
@@ -61,7 +62,7 @@ defmodule WeatherReport do
           get_url(station, ntype)
       end
 
-    with {:ok, %Response{body: body}} <-
+    with {:ok, %Response{body: body} = resp} <-
            HTTPoison.get(url, %{}, follow_redirect: true),
          do:
            (case type do
@@ -69,8 +70,17 @@ defmodule WeatherReport do
                 body
 
               _ ->
+                Logger.info(resp)
                 Forecast.parse(body, type)
             end)
+  end
+
+@doc """
+Refresh cached stations.
+"""
+@spec refresh_stations() :: :ok
+  def refresh_stations() do
+    :ok = GenServer.cast(StationRegistry, :refresh_list)
   end
 
   defp get_url(%Station{rss_url: url}, :rss), do: url

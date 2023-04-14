@@ -18,8 +18,7 @@ defmodule WeatherReport.StationRegistry do
   """
   def init([]) do
     tab = :ets.new(:station_registry, [:private])
-    send(self(), :get_list)
-    {:ok, tab}
+    {:ok, tab, {:continue, :get_list}}
   end
 
   @doc """
@@ -71,10 +70,20 @@ defmodule WeatherReport.StationRegistry do
     {:reply, results, tab}
   end
 
+
+
   @doc """
+  Wipes the station list from ets and re-retrieves it.
+  """
+  def handle_cast(:refresh_list, tab) do
+  true = :ets.delete_all_objects(tab)
+  {:noreply, tab, {:continue, :get_list}}
+  end
+
+    @doc """
   Retrieves the station list and inserts it into ets.
   """
-  def handle_info(:get_list, tab) do
+  def handle_continue(:get_list, tab) do
     entries =
       Station.station_list()
       |> Enum.map(fn station ->

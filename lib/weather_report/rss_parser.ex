@@ -1,12 +1,14 @@
 defmodule WeatherReport.RSSParser do
   @moduledoc false
   # https://github.com/manukall/feeder_ex/blob/master/lib/feeder_ex/parser.ex
+  require Logger
 
   @doc false
   def event(
-        {:feed, {:feed, author, id, image, language, link, subtitle, summary, title, updated}},
+        {:feed, {:feed, author, id, image, language, link, subtitle, summary, title, updated} = e},
         {_, entries}
       ) do
+      Logger.info(e)
     feed = %{
       author: undefined_to_nil(author),
       id: undefined_to_nil(id),
@@ -24,9 +26,10 @@ defmodule WeatherReport.RSSParser do
 
   def event(
         {:entry,
-         {:entry, author, duration, enclosure, id, image, link, subtitle, summary, title, updated}},
+         {:entry, author, duration, enclosure, id, image, link, subtitle, summary, title, updated}=e},
         {feed, entries}
       ) do
+      Logger.info(e)
     entry = %{
       author: undefined_to_nil(author),
       duration: undefined_to_nil(duration),
