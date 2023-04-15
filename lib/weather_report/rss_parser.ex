@@ -1,11 +1,11 @@
 defmodule WeatherReport.RSSParser do
   @moduledoc false
 
-alias WeatherReport.Forecast.RSS
+  alias WeatherReport.Forecast.RSS
 
   @doc false
   def event(
-        {:feed, _ },
+        {:feed, _},
         {_, entries}
       ) do
     # Don't care about feed.
@@ -14,15 +14,20 @@ alias WeatherReport.Forecast.RSS
 
   def event(
         {:entry,
-         {:entry, _author, _categories, _duration, _enclosure, id, _image, link, _subtitle, summary, title, _updated}},
+         {:entry, _author, _categories, _duration, _enclosure, id, _image, link, _subtitle,
+          summary, title, _updated}},
         {_, entries}
       ) do
-    {nil, [%RSS{
-      timestamp: undefined_to_nil(id),
-      link: undefined_to_nil(link),
-      html_summary: undefined_to_nil(summary),
-      title: undefined_to_nil(title),
-    }|entries]}
+    {nil,
+     [
+       %RSS{
+         timestamp: undefined_to_nil(id),
+         link: undefined_to_nil(link),
+         html_summary: undefined_to_nil(summary),
+         title: undefined_to_nil(title)
+       }
+       | entries
+     ]}
   end
 
   def event(:endFeed, {_, entries}) do

@@ -54,9 +54,9 @@ defmodule WeatherReport.Station do
   defp station_xmapper({:station, doc}), do: SweetXml.xmap(doc, @xmap)
 
   defp update_feed_urls(station) do
-  station
-  |> Map.update!(:rss_url, &append_subdomain/1)
-  |> Map.update!(:xml_url, &append_subdomain/1)
+    station
+    |> Map.update!(:rss_url, &append_subdomain/1)
+    |> Map.update!(:xml_url, &append_subdomain/1)
   end
 
   defp append_subdomain(feed_url) do

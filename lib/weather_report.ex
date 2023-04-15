@@ -73,10 +73,10 @@ defmodule WeatherReport do
             end)
   end
 
-@doc """
-Refresh cached stations.
-"""
-@spec refresh_stations() :: :ok
+  @doc """
+  Refresh cached stations.
+  """
+  @spec refresh_stations() :: :ok
   def refresh_stations() do
     :ok = GenServer.cast(StationRegistry, :refresh_list)
   end

@@ -24,6 +24,7 @@ defmodule WeatherReport.Forecast.RSS do
     case :feeder.stream(feed, RSSParser.opts()) do
       {:ok, [entry], ""} ->
         entry
+
       _ ->
         %__MODULE__{}
     end

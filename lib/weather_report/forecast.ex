@@ -13,7 +13,7 @@ defmodule WeatherReport.Forecast do
   """
   @spec parse(String.t(), :xml | :rss) :: {:ok, t} | {:error, String.t()}
   def parse(~s(<?xml version="1.0" encoding="ISO-8859-1"?>) <> feed, :rss) do
-  Logger.info(feed)
+    Logger.info(feed)
     parse(feed, :rss)
   end
 
