@@ -52,7 +52,6 @@ defmodule WeatherReport do
   end
 
   def get_forecast(station, type) do
-  require Logger
     url =
       case type do
         {:raw, subtype} when subtype in [:rss, :xml] ->
@@ -70,7 +69,6 @@ defmodule WeatherReport do
                 body
 
               _ ->
-                Logger.info(resp)
                 Forecast.parse(body, type)
             end)
   end

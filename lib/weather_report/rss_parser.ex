@@ -3,51 +3,32 @@ defmodule WeatherReport.RSSParser do
   # https://github.com/manukall/feeder_ex/blob/master/lib/feeder_ex/parser.ex
   require Logger
 
+alias WeatherReport.Forecast.RSS
+
   @doc false
   def event(
-        {:feed, {:feed, author, id, image, language, link, subtitle, summary, title, updated} = e},
+        {:feed, _ },
         {_, entries}
       ) do
-      Logger.info(e)
-    feed = %{
-      author: undefined_to_nil(author),
-      id: undefined_to_nil(id),
-      image: undefined_to_nil(image),
-      language: undefined_to_nil(language),
-      link: undefined_to_nil(link),
-      subtitle: undefined_to_nil(subtitle),
-      summary: undefined_to_nil(summary),
-      title: undefined_to_nil(title),
-      updated: undefined_to_nil(updated)
-    }
-
-    {feed, entries}
+    # Don't care about feed.
+    {nil, entries}
   end
 
   def event(
         {:entry,
-         {:entry, author, duration, enclosure, id, image, link, subtitle, summary, title, updated}=e},
-        {feed, entries}
+         {:entry, author, categories, duration, enclosure, id, image, link, subtitle, summary, title, updated}=e},
+        {_, entries}
       ) do
-      Logger.info(e)
-    entry = %{
-      author: undefined_to_nil(author),
-      duration: undefined_to_nil(duration),
-      enclosure: parse_enclosure(enclosure),
-      id: undefined_to_nil(id),
-      image: undefined_to_nil(image),
+    {nil, [%RSS{
+      timestamp: undefined_to_nil(id),
       link: undefined_to_nil(link),
-      subtitle: undefined_to_nil(subtitle),
-      summary: undefined_to_nil(summary),
+      html_summary: undefined_to_nil(summary),
       title: undefined_to_nil(title),
-      updated: undefined_to_nil(updated)
-    }
-
-    {feed, [entry | entries]}
+    }|entries]}
   end
 
-  def event(:endFeed, {feed, entries}) do
-    Map.put(feed, :entries, Enum.reverse(entries))
+  def event(:endFeed, {_, entries}) do
+    Enum.reverse(entries)
   end
 
   @doc false
@@ -57,14 +38,4 @@ defmodule WeatherReport.RSSParser do
 
   defp undefined_to_nil(:undefined), do: nil
   defp undefined_to_nil(value), do: value
-
-  defp parse_enclosure(:undefined), do: nil
-
-  defp parse_enclosure({:enclosure, url, size, type}) do
-    %{
-      url: undefined_to_nil(url),
-      size: undefined_to_nil(size),
-      type: undefined_to_nil(type)
-    }
-  end
 end
