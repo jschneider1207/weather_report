@@ -1,7 +1,5 @@
 defmodule WeatherReport.RSSParser do
   @moduledoc false
-  # https://github.com/manukall/feeder_ex/blob/master/lib/feeder_ex/parser.ex
-  require Logger
 
 alias WeatherReport.Forecast.RSS
 
