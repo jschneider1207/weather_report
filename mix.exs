@@ -32,7 +32,7 @@ defmodule WeatherReport.Mixfile do
   defp description do
     """
     Get weather forecasts from the National Oceanic and Atmospheric Administration!
-
+    
     As the NOAA is a United States government agency, only forecasts in the US are supported.
     """
   end

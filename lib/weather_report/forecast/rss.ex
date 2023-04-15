@@ -7,13 +7,13 @@ defmodule WeatherReport.Forecast.RSS do
   defstruct timestamp: nil,
             link: nil,
             html_summary: nil,
-            text: nil
+            title: nil
 
   @type t :: %__MODULE__{
           timestamp: String.t(),
           link: String.t(),
           html_summary: String.t(),
-          text: String.t()
+          title: String.t()
         }
 
   @doc """
@@ -22,13 +22,8 @@ defmodule WeatherReport.Forecast.RSS do
   @spec parse(String.t()) :: t
   def parse(feed) do
     case :feeder.stream(feed, RSSParser.opts()) do
-      {:ok, %{entries: [entry]}, ""} ->
-        %__MODULE__{
-          timestamp: entry.id,
-          link: entry.link,
-          html_summary: entry.summary,
-          text: entry.title
-        }
+      {:ok, [entry], ""} ->
+        entry
 
       _ ->
         %__MODULE__{}

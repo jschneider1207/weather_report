@@ -11,6 +11,10 @@ defmodule WeatherReport.Forecast do
   Parses an rss or xml document into a forecast.
   """
   @spec parse(String.t(), :xml | :rss) :: {:ok, t} | {:error, String.t()}
+  def parse(~s(<?xml version="1.0" encoding="ISO-8859-1"?>) <> feed, :rss) do
+    parse(feed, :rss)
+  end
+
   def parse(feed, :rss) do
     {:ok, RSS.parse(feed)}
   end

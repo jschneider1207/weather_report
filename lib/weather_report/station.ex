@@ -46,11 +46,25 @@ defmodule WeatherReport.Station do
     |> Stream.map(&station_xmapper/1)
     |> Stream.map(&update_coordinate(&1, :latitude))
     |> Stream.map(&update_coordinate(&1, :longitude))
+    |> Stream.map(&update_feed_urls/1)
     |> Stream.map(&struct(__MODULE__, &1))
     |> Enum.to_list()
   end
 
   defp station_xmapper({:station, doc}), do: SweetXml.xmap(doc, @xmap)
+
+  defp update_feed_urls(station) do
+    station
+    |> Map.update!(:rss_url, &append_subdomain/1)
+    |> Map.update!(:xml_url, &append_subdomain/1)
+  end
+
+  defp append_subdomain(feed_url) do
+    URI.parse(feed_url)
+    |> Map.update!(:host, &("w1." <> &1))
+    |> Map.update!(:authority, &("w1." <> &1))
+    |> URI.to_string()
+  end
 
   defp update_coordinate(station, key), do: Map.update!(station, key, &parse_coordinate/1)
 
