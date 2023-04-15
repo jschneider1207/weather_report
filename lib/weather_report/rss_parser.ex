@@ -14,7 +14,7 @@ alias WeatherReport.Forecast.RSS
 
   def event(
         {:entry,
-         {:entry, author, categories, duration, enclosure, id, image, link, subtitle, summary, title, updated}=e},
+         {:entry, _author, _categories, _duration, _enclosure, id, _image, link, _subtitle, summary, title, _updated}},
         {_, entries}
       ) do
     {nil, [%RSS{
